@@ -1,0 +1,7 @@
+## Interface: 11302
+## Title: ShamanBlue
+## Notes: Makes shaman bars blue
+## Author: Hobbes
+## Version: 1.0.0
+main.lua
+
