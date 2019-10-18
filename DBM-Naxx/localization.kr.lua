@@ -32,7 +32,7 @@ L:SetGeneralLocalization({
 })
 
 L:SetWarningLocalization({
-	WarningEmbraceExpire	= "귀부인의 은총 종료 5초 전",
+	WarningEmbraceExpire	= "5초 후 귀부인의 은총 종료",
 	WarningEmbraceExpired	= "귀부인의 은총 종료"
 })
 
@@ -101,6 +101,7 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	Pull				= "죽어라, 침입자들아!",
+	AddsYell			= "Rise, my soldiers! Rise and fight once more!",
 	Adds				= "summons forth Skeletal Warriors!",
 	AddsTwo				= "raises more skeletons!"
 })
@@ -178,17 +179,6 @@ L:SetGeneralLocalization({
 	name = "그라불루스"
 })
 
-L:SetOptionLocalization({
-	SpecialWarningInjection		= "돌연변이 유발에 걸리면 특수 경고 보기"
-})
-
-L:SetWarningLocalization({
-	SpecialWarningInjection		= "당신에게 돌연변이 유발"
-})
-
-L:SetTimerLocalization({
-})
-
 -------------
 --  글루스  --
 -------------
@@ -244,10 +234,10 @@ L:SetGeneralLocalization({
 })
 
 L:SetMiscLocalization({
-	Yell1 = "Show them no mercy!",--확인필요
-	Yell2 = "The time for practice is over! Show me what you have learned!",--확인필요
+	Yell1 = "절대 봐주지 마라!",
+	Yell2 = "훈련은 끝났다! 배운 걸 보여줘라!",
 	Yell3 = "훈련받은 대로 해!",
-	Yell4 = "Sweep the leg... Do you have a problem with that?"--확인필요
+	Yell4 = "다리를 후려 차라! 무슨 문제 있나?"
 })
 
 L:SetOptionLocalization({
@@ -378,8 +368,7 @@ L:SetGeneralLocalization({
 L:SetOptionLocalization({
 	TimerPhase2			= "2단계 타이머 바 보기",
 	specwarnP2Soon		= "켈투자드 전투 개시 10초 전에 특수 경고 보기",
-	warnAddsSoon		= "얼음왕관의 수호자 사전 경고 보기",
-	ShowRange			= "2단계 시작시 거리 창 보기"
+	warnAddsSoon		= "얼음왕관의 수호자 사전 경고 보기"
 })
 
 L:SetMiscLocalization({
@@ -388,7 +377,7 @@ L:SetMiscLocalization({
 
 L:SetWarningLocalization({
 	specwarnP2Soon		= "10초 후 켈투자드 전투 개시",
-	warnAddsSoon		= "곧 얼음왕관의 수호자 나옴"
+	warnAddsSoon		= "곧 얼음왕관의 수호자 등장"
 })
 
 L:SetTimerLocalization({

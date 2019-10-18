@@ -160,6 +160,7 @@ DBM_CORE_UPDATEREMINDER_MAJORPATCH		= "WARNING: Do to your Deadly Boss Mods bein
 DBM_CORE_UPDATEREMINDER_TESTVERSION		= "WARNING: You are using a version of Deadly Boss Mods not intended to be used with this game version. Please make sure you download the appropriate version for your game client from deadlybossmods.com or curse."
 DBM_CORE_VEM							= "WARNING: You are running both Deadly Boss Mods and Voice Encounter Mods. DBM will not run in this configuration and therefore will not be loaded."
 DBM_CORE_3RDPROFILES					= "WARNING: DBM-Profiles not compatible with this version of DBM. It must be removed before DBM can proceed, to avoid conflict."
+DBM_CORE_VICTORYSOUND					= "WARNING: DBM-VictorySound not compatible with this version of DBM. It must be removed before DBM can proceed, to avoid conflict."
 DBM_CORE_DPMCORE						= "WARNING: Deadly PvP mods is discontinued and not compatible with this version of DBM. It must be removed before DBM can proceed, to avoid conflict."
 DBM_CORE_DBMLDB							= "WARNING: DBM-LDB is now built into DBM-Core. While it won't do any harm, it's recommended to remove 'DBM-LDB' from your addons folder"
 DBM_CORE_UPDATE_REQUIRES_RELAUNCH		= "WARNING: This DBM update will not work correctly if you don't fully restart your game client. This update contains new files or .toc file changes that cannot be loaded via ReloadUI. You may encounter broken functionality or errors if you continue without a client restart."
@@ -543,7 +544,7 @@ DBM_CORE_HUD_USAGE	= {
 	"Valid types: arrow, dot, red, blue, green, yellow, icon (requires a target with raid icon)",
 	"Valid targets: target, focus, <playername>",
 	"Valid durations: any number (in seconds). If left blank, 20min will be used.",
-	"/dbm hud hide:  disables and hides the HUD"
+	"/dbm hud hide: disables user generated HUD objects"
 }
 
 DBM_ARROW_MOVABLE					= "Arrow movable"
@@ -593,33 +594,33 @@ DBM_CORE_DUR_ENTRY					= "%s: Durability [%d percent] / Gear broken [%s]"
 DBM_CORE_LAG_FOOTER					= "No Response: %s"
 
 --Role Icons
-DBM_CORE_TANK_ICON			= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:6:21:7:27|t"
-DBM_CORE_DAMAGE_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:39:55:7:27|t"
-DBM_CORE_HEALER_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:70:86:7:27|t"
+DBM_CORE_TANK_ICON			= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:6:21:7:27|t"
+DBM_CORE_DAMAGE_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:39:55:7:27|t"
+DBM_CORE_HEALER_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:70:86:7:27|t"
 
-DBM_CORE_TANK_ICON_SMALL	= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:12:12:0:0:255:66:6:21:7:27|t"
-DBM_CORE_DAMAGE_ICON_SMALL	= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:12:12:0:0:255:66:39:55:7:27|t"
-DBM_CORE_HEALER_ICON_SMALL	= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:12:12:0:0:255:66:70:86:7:27|t"
+DBM_CORE_TANK_ICON_SMALL	= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:12:12:0:0:255:66:6:21:7:27|t"
+DBM_CORE_DAMAGE_ICON_SMALL	= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:12:12:0:0:255:66:39:55:7:27|t"
+DBM_CORE_HEALER_ICON_SMALL	= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:12:12:0:0:255:66:70:86:7:27|t"
 --Importance Icons
-DBM_CORE_HEROIC_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:22:22:0:0:255:66:102:118:7:27|t"
-DBM_CORE_DEADLY_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:22:22:0:0:255:66:133:153:7:27|t"
-DBM_CORE_IMPORTANT_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:168:182:7:27|t"
-DBM_CORE_MYTHIC_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:22:22:0:0:255:66:133:153:40:58|t"
+DBM_CORE_HEROIC_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:22:22:0:0:255:66:102:118:7:27|t"
+DBM_CORE_DEADLY_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:22:22:0:0:255:66:133:153:7:27|t"
+DBM_CORE_IMPORTANT_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:168:182:7:27|t"
+DBM_CORE_MYTHIC_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:22:22:0:0:255:66:133:153:40:58|t"
 
-DBM_CORE_HEROIC_ICON_SMALL	= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:14:14:0:0:255:66:102:118:7:27|t"
-DBM_CORE_DEADLY_ICON_SMALL	= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:14:14:0:0:255:66:133:153:7:27|t"
-DBM_CORE_IMPORTANT_ICON_SMALL= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:12:12:0:0:255:66:168:182:7:27|t"
+DBM_CORE_HEROIC_ICON_SMALL	= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:14:14:0:0:255:66:102:118:7:27|t"
+DBM_CORE_DEADLY_ICON_SMALL	= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:14:14:0:0:255:66:133:153:7:27|t"
+DBM_CORE_IMPORTANT_ICON_SMALL= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:12:12:0:0:255:66:168:182:7:27|t"
 --Type Icons
-DBM_CORE_INTERRUPT_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:198:214:7:27|t"
-DBM_CORE_MAGIC_ICON			= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:229:247:7:27|t"
-DBM_CORE_CURSE_ICON			= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:6:21:40:58|t"
-DBM_CORE_POISON_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:39:55:40:58|t"
-DBM_CORE_DISEASE_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:70:86:40:58|t"
-DBM_CORE_ENRAGE_ICON		= "|TInterface\\EncounterJournal\\UI-EJ-Icons.blp:20:20:0:0:255:66:102:118:40:58|t"
+DBM_CORE_INTERRUPT_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:198:214:7:27|t"
+DBM_CORE_MAGIC_ICON			= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:229:247:7:27|t"
+DBM_CORE_CURSE_ICON			= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:6:21:40:58|t"
+DBM_CORE_POISON_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:39:55:40:58|t"
+DBM_CORE_DISEASE_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:70:86:40:58|t"
+DBM_CORE_ENRAGE_ICON		= "|TInterface\\AddOns\\DBM-Core\\textures\\UI-EJ-Icons.blp:20:20:0:0:255:66:102:118:40:58|t"
 
 --LDB
-DBM_LDB_TOOLTIP_HELP1	= "Left-click to open DBM"
-DBM_LDB_TOOLTIP_HELP2	= "Right-click to open config menu"
+DBM_LDB_TOOLTIP_HELP1	= "Click to open DBM"
+--DBM_LDB_TOOLTIP_HELP2	= "Right-click to open config menu"
 
 DBM_LDB_LOAD_MODS		= "Load boss mods"
 

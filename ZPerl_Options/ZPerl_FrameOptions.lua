@@ -1,5 +1,5 @@
 -- X-Perl UnitFrames
--- Author: Zek <Boodhoof-EU>
+-- Author: Resike
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
 XPerl_SetModuleRevision("$Revision:  $")
@@ -79,8 +79,8 @@ function XPerl_OptionsSetMyText(f, str, keep)
 		end
 
 		if (not keep) then
-			setglobal(str, nil)
-			setglobal(str.."_DESC", nil)
+			_G[str] = nil
+			_G[str.."_DESC"] = nil
 		end
 	end
 end
@@ -914,15 +914,15 @@ end
 -- XPerl_Options_GetRangeTexture
 function XPerl_Options_GetRangeTexture(self)
 	local spell = GetSpell()
-	if (spell) then
+	if spell then
 		local tex = GetSpellTexture(spell)
 		return tex, spell
 	end
 
 	local item = GetItem()
-	if (item) then
+	if item then
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, invTexture = GetItemInfo(item)
-		if (itemName) then
+		if itemName then
 			return invTexture, itemName
 		end
 	end
@@ -932,15 +932,22 @@ end
 
 -- XPerl_Options_DoRangeTooltip
 function XPerl_Options_DoRangeTooltip(self)
-
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT", -15, 0)
 
 	local spell = GetSpell()
-	if (spell) then
+	if spell then
 		local link = GetSpellLink(spell)
-		if (link) then
-			--GameTooltip:SetHyperlink(link)
-		--else
+		if link then
+			if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+				local _, _, _, _, _, _, spellID = GetSpellInfo(spell)
+				if spellID then
+					local newLink = format("spell:%d:0:0:0", spellID)
+					GameTooltip:SetHyperlink(newLink)
+				end
+			else
+				GameTooltip:SetHyperlink(link)
+			end
+		else
 			GameTooltip:SetText(spell or UNKNOWN, 1, 1, 1)
 		end
 
@@ -955,16 +962,16 @@ function XPerl_Options_DoRangeTooltip(self)
 	end
 
 	local item = GetItem()
-	if (item) then
+	if item then
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, invTexture = GetItemInfo(item)
-		if (itemName) then
+		if itemName then
 			local itemId = strmatch(itemLink, "item:(%d+):")
-			if (itemId) then
+			if itemId then
 				local newLink = format("item:%d:0:0:0", itemId)
 				GameTooltip:SetHyperlink(newLink)
 
 				GameTooltip:AddLine(" ")
-				if (XPerlDB.rangeFinder[XPerl_Options.optRange].CustomRangeItem) then
+				if XPerlDB.rangeFinder[XPerl_Options.optRange].item then
 					GameTooltip:AddLine(XPERL_CONF_CUSTOMSPELL_DESC, 0.5, 1, 0.5)
 				else
 					GameTooltip:AddLine(XPERL_CONF_CUSTOMSPELL_DESC2, 0.5, 1, 0.5)
@@ -977,20 +984,37 @@ end
 
 -- DefaultRaidClasses
 local function DefaultRaidClasses()
-	return {
-		{enable = true, name = "WARRIOR"},
-		{enable = true, name = "DEATHKNIGHT"},
-		{enable = true, name = "ROGUE"},
-		{enable = true, name = "HUNTER"},
-		{enable = true, name = "MAGE"},
-		{enable = true, name = "WARLOCK"},
-		{enable = true, name = "PRIEST"},
-		{enable = true, name = "DRUID"},
-		{enable = true, name = "SHAMAN"},
-		{enable = true, name = "PALADIN"},
-		{enable = true, name = "MONK"},
-		{enable = true, name = "DEMONHUNTER"},
-	}
+	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		return {
+			{enable = true, name = "WARRIOR"},
+			--{enable = true, name = "DEATHKNIGHT"},
+			{enable = true, name = "ROGUE"},
+			{enable = true, name = "HUNTER"},
+			{enable = true, name = "MAGE"},
+			{enable = true, name = "WARLOCK"},
+			{enable = true, name = "PRIEST"},
+			{enable = true, name = "DRUID"},
+			{enable = true, name = "SHAMAN"},
+			{enable = true, name = "PALADIN"},
+			--{enable = true, name = "MONK"},
+			--{enable = true, name = "DEMONHUNTER"},
+		}
+	else
+		return {
+			{enable = true, name = "WARRIOR"},
+			{enable = true, name = "DEATHKNIGHT"},
+			{enable = true, name = "ROGUE"},
+			{enable = true, name = "HUNTER"},
+			{enable = true, name = "MAGE"},
+			{enable = true, name = "WARLOCK"},
+			{enable = true, name = "PRIEST"},
+			{enable = true, name = "DRUID"},
+			{enable = true, name = "SHAMAN"},
+			{enable = true, name = "PALADIN"},
+			{enable = true, name = "MONK"},
+			{enable = true, name = "DEMONHUNTER"},
+		}
+	end
 end
 
 -- ValidateClassNames
@@ -1000,7 +1024,12 @@ local function ValidateClassNames(part)
 	end
 	-- This should never happen, but I'm sure someone will find a way to break it
 
-	local list = {WARRIOR = false, MAGE = false, ROGUE = false, DRUID = false, HUNTER = false, SHAMAN = false, PRIEST = false,	WARLOCK = false, PALADIN = false, DEATHKNIGHT = false, MONK = false, DEMONHUNTER = false}
+	local list
+	if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+		list = {WARRIOR = false, MAGE = false, ROGUE = false, DRUID = false, HUNTER = false, SHAMAN = false, PRIEST = false,	WARLOCK = false, PALADIN = false}
+	else
+		list = {WARRIOR = false, MAGE = false, ROGUE = false, DRUID = false, HUNTER = false, SHAMAN = false, PRIEST = false,	WARLOCK = false, PALADIN = false, DEATHKNIGHT = false, MONK = false, DEMONHUNTER = false}
+	end
 	local valid
 	if (part.class) then
 		local classCount = 0
@@ -1081,7 +1110,7 @@ function XPerl_Options_RaidSelectAll(self, enable)
 	local val
 	local prefix = self:GetParent():GetName().."_"
 
-	for i = 1,WoWclassCount do
+	for i = 1, WoWclassCount do
 		local f = _G[prefix.."Grp"..i]
 		if (f) then
 			f:SetChecked(enable)
@@ -1429,7 +1458,7 @@ function XPerl_Options_LayoutGetList(self)
 end
 
 -- XPerl_Options_GetLayout
-function XPerl_Options_GetLayout(self, name)
+function XPerl_Options_GetLayout(name)
 	if (ZPerlConfigNew.savedPositions) then
 		for realmName, realmList in pairs(ZPerlConfigNew.savedPositions) do
 			for playerName, frames in pairs(realmList) do
@@ -1461,7 +1490,7 @@ end
 
 -- XPerl_Options_LoadFrameLayout
 function XPerl_Options_LoadFrameLayout(name)
-	local layout = XPerl_Options_GetLayout(self, name)
+	local layout = XPerl_Options_GetLayout(name)
 
 	if (layout) then
 		local name = UnitName("player")
@@ -1596,10 +1625,10 @@ function XPerl_Options_ImportOldConfig(old)
 		bar = {
 			texture		= old.BarTexture,
 			background	= Convert(old.BackgroundTextures),
-			fading		= Convert(old.FadingBars),				-- 1.8.9
-			fadeTime	= old.FadingBarsTime			or 0.5,		-- 1.9.1
-			fat		= Convert(old.FatHealthBars),
-			inverse		= Convert(old.InverseBars),				-- 1.8.6
+			fading		= Convert(old.FadingBars), -- 1.8.9
+			fadeTime	= old.FadingBarsTime or 0.5, -- 1.9.1
+			fat			= Convert(old.FatHealthBars),
+			inverse		= Convert(old.InverseBars), -- 1.8.6
 		},
 		transparency = {
 			frame		= old.Transparency			or 1,
@@ -1736,6 +1765,11 @@ function XPerl_Options_ImportOldConfig(old)
 			portrait		= Convert(old.ShowPlayerPetPortrait),
 			portrait3D		= Convert(old.ShowPlayerPetPortrait3D),
 			hitIndicator		= Convert(old.PetCombatHitIndicator),
+			happiness = {
+				enabled		= Convert(old.PetHappiness),
+				onlyWhenSad	= Convert(old.PetHappinessSad),
+				flashWhenSad	= Convert(old.PetFlashWhenSad),
+			},
 			level			= Convert(old.ShowPetLevel),
 			scale			= old.Scale_PetFrame		or 0.8,
 			name			= Convert(old.ShowPlayerPetName),
@@ -1764,7 +1798,7 @@ function XPerl_Options_ImportOldConfig(old)
 			castBar = {
 				enable		= Convert(old.ArcaneBarTarget),
 			},
-			hitIndicator		= Convert(old.TargetCombatHitIndicator),			-- 2.1.7
+			hitIndicator	= Convert(old.TargetCombatHitIndicator),			-- 2.1.7
 			classIcon		= Convert(old.ShowTargetClassIcon),
 			classText		= Convert(old.ShowTargetClassText),			-- 2.0.6
 			mobType			= Convert(old.ShowTargetMobType),
@@ -1777,7 +1811,7 @@ function XPerl_Options_ImportOldConfig(old)
 			combo = {
 				enable		= Convert(old.UseCPMeter),
 				blizzard	= Convert(old.BlizzardCPMeter),
-				pos		= old.BlizzardCPPosition	or "top",
+				pos			= old.BlizzardCPPosition	or "top",
 			},
 			pvpIcon			= Convert(old.ShowTargetPVP),			-- 1.8.3
 			scale			= old.Scale_TargetFrame		or 0.8,
@@ -2200,7 +2234,7 @@ end
 
 -- XPerl_Target_ConfigDefault
 local function XPerl_Target_ConfigDefault(default, section)
-	local defaultHD
+	local defaultHD, defaultHDwho
 	local _, class = UnitClass("player")
 	if (section == "target" and class == "ROGUE") then
 		defaultHD = 1
@@ -2262,7 +2296,7 @@ local function XPerl_Target_ConfigDefault(default, section)
 --		defer			= nil,			-- 1.9.5
 		highlightDebuffs = {
 			enable		= defaultHD,
-			who		= defaultHDwho		-- 2.2.0
+			who			= defaultHDwho		-- 2.2.0
 		},
 		size = {
 			width		= 0,
@@ -2397,7 +2431,7 @@ local function XPerl_Player_ConfigDefault(default)
 			size		= 25,
 			wrap		= 1,			-- 2.3.5
 			rows		= 2,			-- 2.3.5
-			hideBlizzard	= 0,
+			hideBlizzard	= 1,
 			count		= 40,
 			cooldown	= 1,
 			flash		= 1,
@@ -2421,6 +2455,11 @@ local function XPerl_Pet_ConfigDefault(default)
 		portrait = 1,
 		portrait3D = 1,
 		hitIndicator= 1,
+		happiness = {
+			enabled		= 1,
+			onlyWhenSad	= 1,
+			flashWhenSad	= 1,
+		},
 		threat = 1,
 		threatMode = "portraitFrame",
 		level = 1,
@@ -2651,8 +2690,15 @@ function XPerl_Custom_Config_OnShow(self)
 	XPerl_Options_Custom_StartIconDB(self)
 end
 
+local function CompareSpell(a, b)
+	local nameA = GetSpellInfo(a)
+	local nameB = GetSpellInfo(b)
+
+	return nameA < nameB
+end
+
 -- XPerl_Options_Custom_FillList
-function XPerl_Options_Custom_FillList(self)
+function XPerl_Options_Custom_FillList(self, setName)
 	if (not XPerlDB) then
 		return
 	end
@@ -2671,7 +2717,7 @@ function XPerl_Options_Custom_FillList(self)
 	end
 
 	if (source) then
-		for name,key in pairs(source) do
+		for name, key in pairs(source) do
 			if (not list) then
 				list = {}
 			end
@@ -2687,12 +2733,7 @@ function XPerl_Options_Custom_FillList(self)
 			if (typ == "zone") then
 				sort(list)
 			elseif (typ == "debuff") then
-				sort(list,
-					function(a, b)
-						local nameA = GetSpellInfo(a)
-						local nameB = GetSpellInfo(b)
-						return nameA < nameB
-					end)
+				sort(list, CompareSpell)
 			end
 		end
 	end
@@ -2719,7 +2760,7 @@ function XPerl_Options_Custom_FillList(self)
 	if (list) then
 		local newName
 		local line = 1
-		for i = self.start,self.start+#self.line-1 do
+		for i = self.start, self.start + #self.line - 1 do
 			if (i > #list) then
 				break
 			end
@@ -2779,9 +2820,8 @@ end
 
 -- XPerl_Options_Custom_SetIcon
 function XPerl_Options_Custom_SetIcon()
-	self = XPerl_Custom_Config
 	local name = XPerl_Custom_Configdebuffs.debuff
-	local db = self.iconDB
+	local db = XPerl_Custom_Config.iconDB
 	if (db and name) then
 		local spellid = db and db[name]
 		if (spellid) then
@@ -2818,18 +2858,17 @@ end
 
 -- customOnUpdate
 local ICON_STEP_SIZE	= 500
-local ICON_STOP_SCAN	= 120000
-local function customOnUpdate(self, elspsed)
+local ICON_STOP_SCAN	= WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and 33000 or 310000
+local function customOnUpdate(self, elapsed)
 	local db = self.iconDB
 	local ind = self.iconIndex
 	local stop
 	for i = ind, ind + ICON_STEP_SIZE - 1 do
-		if GetSpellLink(i) then										-- Filter out talents
+		if GetSpellLink(i) then -- Filter out talents
 			local name, _, icon = GetSpellInfo(i)
 			if name then
-				if icon ~= "Interface\\Icons\\Temp" then			-- Filter out silly test ones
-					name = strlower(name)
-					db[name] = i
+				if icon ~= 134400 and icon ~= 136235 then -- Filter out silly test ones
+					db[i] = strlower(name)
 				end
 			end
 			self.missing = 0
@@ -2844,11 +2883,17 @@ local function customOnUpdate(self, elspsed)
 
 	self.iconIndex = self.iconIndex + ICON_STEP_SIZE
 	self.progress:SetValue(self.iconIndex)
-	if stop then
+	if stop or self.iconIndex == ICON_STOP_SCAN then
 		self:SetScript("OnUpdate", nil)
 		self.progress:SetValue(0)
 		self.missing = nil
 		XPerl_Options_Custom_FillList(XPerl_Custom_Configdebuffs)
+	elseif self.iconIndex % ICON_STEP_SIZE == 0 then
+		self:SetScript("OnUpdate", nil)
+
+		C_Timer.After(0.1, function()
+			self:SetScript("OnUpdate", customOnUpdate)
+		end)
 	end
 
 	local search = XPerl_Custom_ConfigNew_Search:GetText()
@@ -2858,13 +2903,14 @@ local function customOnUpdate(self, elspsed)
 end
 
 -- XPerl_Options_Custom_StartIconDB
-function XPerl_Options_Custom_StartIconDB(self)
+function XPerl_Options_Custom_StartIconDB(self, index)
+	self.iconDB = XPerl_GetReusableTable()
+	--self.iconDB = { }
+	self.iconIndex = index or 0
+	self.progress:SetMinMaxValues(index or 0, ICON_STOP_SCAN)
+	self.progress:SetValue(index or 0)
+
 	self:SetScript("OnUpdate", customOnUpdate)
-	--local db = XPerl_GetReusableTable()
-	self.iconDB = { }
-	self.iconIndex = 0
-	self.progress:SetMinMaxValues(0, ICON_STOP_SCAN)
-	self.progress:SetValue(0)
 end
 
 -- XPerl_Options_Custom_CleanupIconDB
@@ -2872,108 +2918,124 @@ function XPerl_Options_Custom_CleanupIconDB(self)
 	XPerl_FreeTable(self.iconDB, true)
 end
 
--- XPerl_Options_Custom_StartIconDB
+-- XPerl_Options_Custom_ScanForIcons
 function XPerl_Options_Custom_ScanForIcons(self)
 	local search = XPerl_Custom_ConfigNew_Search:GetText()
-	if (search and strlen(search) > 2) then
+	if search and strlen(search) > 2 then
 		search = strlower(search)
 		local dbname = self.iconDB and self.iconDB
-		if (dbname) then
-			--local list = XPerl_GetReusableTable()
-			local list = { }
-			for name, id in pairs(dbname) do
-				local success, ret = pcall(strfind, name, search)
-				if (success and ret) then
-					tinsert(list, id)
-					if (#list > 50) then
+		if dbname then
+			local list = XPerl_GetReusableTable()
+			--local list = { }
+			for id, name in pairs(dbname) do
+				if tonumber(search) then
+					if id == tonumber(search) then
+						tinsert(list, id)
 						break
+					end
+				else
+					local success, ret = pcall(strfind, name, search)
+					if success and ret then
+						tinsert(list, id)
+						if #list > 40 then
+							break
+						end
 					end
 				end
 			end
 
-			if (not self.icons.icon) then
-				self.icons.icon = {}
+			if not self.icons.icon then
+				self.icons.icon = { }
 			end
 
-			local count = min(#list, 18)
+			local count = min(#list, 40)
 			local iconNum = 1
-			for i,spellid in ipairs(list) do
+			for i, spellid in ipairs(list) do
 				local spellid = list[i]
 				local icon = self.icons.icon[iconNum]
-				if (not icon) then
+				if not icon then
 					icon = CreateFrame("Button", "XPerlOptionsCustomIcon"..iconNum, XPerl_Custom_ConfigNew_Icons, "ActionButtonTemplate")
 					self.icons.icon[iconNum] = icon
 					icon.tex = _G[icon:GetName().."Icon"]
 
-					icon:SetScript("OnClick",
-						function(self)
-							if (IsModifiedClick("CHATLINK")) then
-								local link = GetSpellLink(self.spellid)
-								if (link) then
-									ChatEdit_InsertLink(link)
-								end
-							else
-								local zone = XPerl_Custom_ConfigNew_Zone:GetText()
-								if (zone and zone ~= "") then
-									local zones = XPerlDB.custom.zones
-									if (not zones[zone]) then
-										zones[zone] = {}
-									end
-									XPerlDB.custom.zones[zone][self.spellid]=true
-									XPerl_Custom_ConfigNew:Hide()
-									XPerl_Custom_Config.listzone:FillList()
-									XPerl_Custom_Config.listdebuff:FillList()
-
-									if (ZPerl_Custom) then
-										ZPerl_Custom:PLAYER_ENTERING_WORLD()
-									end
-								end
-							end
-						end)
-					icon:SetScript("OnEnter",
-						function(self)
-							GameTooltip:SetOwner(self, "ANCHOR_TOP")
+					icon:SetScript("OnClick", function(self)
+						if IsModifiedClick("CHATLINK") then
 							local link = GetSpellLink(self.spellid)
-							local name, _, icon = GetSpellInfo(self.spellid)
-							if (link) then
-								GameTooltip:SetHyperlink(link)
-							else
-								GameTooltip:SetText(name, 1, 1, 1)
+							if link then
+								ChatEdit_InsertLink(link)
 							end
-						end)
-					icon:SetScript("OnLeave",
-						function(self)
-							GameTooltip:Hide()
-						end)
+						else
+							local zone = XPerl_Custom_ConfigNew_Zone:GetText()
+							if zone and zone ~= "" then
+								local zones = XPerlDB.custom.zones
+								if not zones[zone] then
+									zones[zone] = {}
+								end
+								XPerlDB.custom.zones[zone][self.spellid] = true
+								XPerl_Custom_ConfigNew:Hide()
+								XPerl_Custom_Config.listzone:FillList()
+								XPerl_Custom_Config.listdebuff:FillList()
 
-					if (iconNum == 1) then
+								if (ZPerl_Custom) then
+									ZPerl_Custom:PLAYER_ENTERING_WORLD()
+								end
+							end
+						end
+					end)
+					icon:SetScript("OnEnter", function(self)
+						GameTooltip:SetOwner(self, "ANCHOR_TOP")
+						local link = GetSpellLink(self.spellid)
+						local name, _, icon = GetSpellInfo(self.spellid)
+						if link then
+							if WOW_PROJECT_ID == WOW_PROJECT_CLASSIC then
+								local _, _, _, _, _, _, spellID = GetSpellInfo(self.spellid)
+								if spellID then
+									local newLink = format("spell:%d:0:0:0", spellID)
+									GameTooltip:SetHyperlink(newLink)
+								end
+							else
+								GameTooltip:SetHyperlink(link)
+							end
+						else
+							GameTooltip:SetText(name, 1, 1, 1)
+						end
+					end)
+					icon:SetScript("OnLeave", function(self)
+						GameTooltip:Hide()
+					end)
+
+					if iconNum == 1 then
 						icon:SetPoint("TOPLEFT")
-					elseif (iconNum == 10) then
+					elseif (iconNum == 11) then
 						icon:SetPoint("TOPLEFT", self.icons.icon[1], "BOTTOMLEFT", 0, -9)
+					elseif (iconNum == 21) then
+						icon:SetPoint("TOPLEFT", self.icons.icon[11], "BOTTOMLEFT", 0, -9)
+					elseif (iconNum == 31) then
+						icon:SetPoint("TOPLEFT", self.icons.icon[21], "BOTTOMLEFT", 0, -9)
 					else
 						icon:SetPoint("TOPLEFT", self.icons.icon[iconNum - 1], "TOPRIGHT", 9, 0)
 					end
 				end
 
 				local name, _, tex = GetSpellInfo(spellid)
-				if (tex) then
+				if tex then
 					icon.spellid = spellid
 					icon.tex:SetTexture(tex)
 					icon:Show()
-					if (GameTooltip:IsOwned(icon)) then
+					if GameTooltip:IsOwned(icon) then
 						icon:GetScript("OnEnter")(icon)
 					end
 					iconNum = iconNum + 1
 				end
 
-				if (iconNum > 18) then
+				if iconNum > 40 then
 					break
 				end
 			end
 
-			for i = #list + 1,18 do
+			for i = #list + 1, 40 do
 				local icon = self.icons.icon[i]
-				if (icon) then
+				if icon then
 					icon:Hide()
 				end
 			end
@@ -2993,7 +3055,7 @@ function XPerl_Options_Custom_OnDelete(self)
 	local zone = XPerl_Options_Custom_SelectedZone(self)
 	local spellid = XPerl_Options_Custom_SelectedDebuff(self)
 	if (zone and spellid) then
-		zones = XPerlDB.custom.zones
+		local zones = XPerlDB.custom.zones
 		if (zones and zones[zone]) then
 			zones[zone][spellid] = nil
 
@@ -3014,7 +3076,7 @@ function XPerl_Options_Custom_SelectedZone(self)
 	local sel = self.listzone.selection
 	local start = self.listzone.start
 	if (sel) then
-		local row = self.listzone.line[sel-start+1]
+		local row = self.listzone.line[sel - start + 1]
 		if (row) then
 			return row:GetText()
 		end
@@ -3362,6 +3424,23 @@ if (XPerl_UpgradeSettings) then
 
 				old.custom.zones[EJ_GetInstanceInfo(946)] = {[246220] = true, [248819] = true, [248815] = true, [244768] = true, [244071] = true, [244086] = true, [248861] = true, [248326] = true, [247552] = true, [248068] = true, [253600] = true, [249297] = true, [252760] = true, [246687] = true, [243961] = true, [245586] = true, [245995] = true, [251570] = true, [250669] = true, [255199] = true}
 				old.custom.zones[EJ_GetInstanceInfo(875)] = {[236449] = true, [235213] = true, [235240] = true, [240209] = true, [235222] = true, [238429] = true}
+			end
+
+			if (oldVersion < "5.8.2") then
+				old.pet.happiness = { }
+				old.pet.happiness.enabled = 1
+				old.pet.happiness.onlyWhenSad = 1
+				old.pet.happiness.flashWhenSad = 1
+			end
+
+			if (oldVersion < "5.8.6") then
+				if old.custom.zones then
+					for k, v in pairs(old.custom.zones) do
+						if type(k) ~= "string" then
+							old.custom.zones[k] = nil
+						end
+					end
+				end
 			end
 		end
 	end

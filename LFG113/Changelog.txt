@@ -1,0 +1,163 @@
+Todo:
+     - NEED to make it so when your looking for a group and ADD someone to make a group, your Searching for a group changes to Looking for more.
+
+Beta V.19
+     - Whispers working, Display corrected via missing = in script
+
+Beta V.18
+     - WHISPERS ARE NOT WORKING: did a temporary fix where whispers work again, but will not be changed by settings. Settings can still be changed and saved but the whispers are not effected yet.
+
+Beta V.16
+
+     - Active Searches and Black List have been created on the left tab, Disabled at this point
+     - Settings have changed and have been partialy orginized
+     - Whispers can now be customized. you can use a FORMAT:
+     --- {i} = instance
+     --- {t} = instance type text
+     --- {r} = your role(s) selected
+     --- {l} = your current level
+     --- {c} = your current class
+
+     - NOTE*
+     -------- {t} will return ONE of the strings depending on the instance type selected via the pulldown:
+     --------    Dungeons selected: "for the dungeon"
+     --------    Raids Selected: "for the raid"
+     --------    Questing Selected: "to do some questing in"
+     --------    PVP Selected: "to PVP in"
+
+     - Example: 
+     -------- I'm a {l} {r} looking for a group {t} {i}
+     --------    would return I'm a 19 DPS looking for a group for the dungeon RFK 
+     --------    if you where level 19 with DPS and RFK selected.
+
+
+Beta V.15
+
+     - There is now a button to view ALL active searches and allow you to search for more then one instance/pvp/etc (NOT active yet but visible)
+     - Buttons have changed. IF you liked the classic version, you can change it back in settings. REQUIRES a reload if option is changed- in chat type:  /reload
+     - Settings changed a little to make more room
+
+
+Beta V.14
+
+     - Added a button that DOES NOTHING... its a demo of a major upgrade if accepted... LOOKING FOR FEEDBACK ONLY!
+
+
+Beta V.13
+
+     - SORRY! the last update had a single quote in Global vars instead of a double causing the addon not to load or giving errors. This has been corrected
+
+
+Beta V.12
+
+     - Added mini-map icon whenever you have an ACTIVE search going on. (yea yea yea, its the same moving eye lol)
+           - Mini-map icon is movable by right mouse button. It will remember location when you logout/login or reload
+           - Mini-map icon will open/close then interface when you left click
+     - This way, you will know if you have an active search going.
+
+
+Beta V.11
+
+     - Improved how chat is parsed, picking up on more instances. Still need to do variations from the norm.
+     - World PVP should now be working. Now you can get a group going and Storm Southshore or Stormwind!
+     - When entering text into the CUSTOM or PVP text area, a pulldown will show up so you can see all of your text and edit it
+
+
+Beta V.10 
+
+     - FIX PING so it only goes off when there is a valid, un-grayed Accept and its clickable.
+     - FIX the annoying Error message in chat when you invite someone to your group and your not searching/looking. 
+     - If the POPUP Accept is selected, it will automatically press ACCEPT on frame also.
+     - IF for any reason the broadcast is going to fail while searching, your search will end and a warning in text will show up in chat saying why and if sound is enabled, an audio warning. While searching, ANY changes you make will be on the next broadcast unless its an invalid change (Like no Roles or Instance selected)
+     - Corrected Instance text when whispering (if someone mentions a level like 19 AND/OR role like DPS then they will trigger an event, otherwise the whisper will be ignored and get no response) IT would be possible for you to have a discussion and use any of those keywords... this WILL trigger the whisper event until I find another way
+     - Update to use Custom (NOT PVP WORLD)
+           - Custom text working. You can Search for or create groups with it. 
+           - Whispers or the Addon are the only form of communication with this
+           - Chat channels ARE  NOT monitored for this, if someone says they want to join via a channel it will not register.
+           - Enter/ESC are used to exit the Custom text box
+           - You can not invite someone to your group if you haven't selected an Activity and Instance for what you are looking for. You need to have both to be valid (No need for roles, this is just to let everyone know what you need)
+
+
+Beta V.09
+
+     - 10/6/19 I had a V.10 coming up but "Updated" my addons with curse, not ignoring LFG113 thus deleting my two days of work.... needless to say i'm starting over and update should be coming soon.
+
+     Whats New:
+      - You can no longer use "Select Any" when choosing an instance.
+      - Select Any is now only used to view what people are looking for. you can join or invite from their without creating a group. 
+      - Rewrote the  way groups are handled. The Addon should automatically stop broadcasting once you have a full group.
+      - Changed letters so there are capitals in the sentence and they should stand out.
+      - Changed the way Broadcast works. It no longer broadcasts every channel at once, it will now span the broadcast over several channels you selected in settings randomly over 15 seconds. This will happen once every n# Seconds set by the slider in settings.
+
+
+Beta V.08
+
+     - IMPORTANT UPDATE: This has the possibility to spam channels due to GROUP_ROSTER_UPDATE trigger (Dependent on number in group). This has been fixed. 
+     - PLEASE UPDATE.
+
+     Whats New: 
+     - Popups now work when someone requests to join (Turn on in settings, its off by default)
+     - Now, when joining a group the addon will stop broadcasting on channels and put you into Settings tab, thereby not allowing you to browse for more groups or try to join another group.
+
+
+Beta V.07
+
+     - Changed the way Timing works. A new timer is created every time you click on Start Search and destroyed when search ends. An initial broadcast will be sent and then one every n# seconds after you click Start Search.
+     - Requested by a couple of people: Settings now contains a Slider called "Time to Broadcast"  so you can change the Broadcasting time. Broadcasting is defaulted to the minimum 1 minute (60 seconds) but you can increase the time up to 3 minutes (180 seconds)
+
+
+Beta V.06
+
+     - Made it so you can not look for a group while in a group.
+     - Improved logic on number in group while searching for a group based on raid, instance or pvp.  The display will show accordingly unless unspecified in chat, then it will be left blank.
+     - Added Custom Option to the Instances, Raids, PVP and Questing pulldown.
+     - Added Custom text entries for Custom and World PVP Pulldowns, but stopped short of entering the entries into the broadcasts. THIS is where I need feedback, should I continue with both CUSTOM entries? 
+     - Logically, any Spammer could then USE this to just Spam channels for GOLD or whatever they wish (the text is LIMITED to 150 characters, but even 20 characters could be enough for Spamming GOLD or whatever)
+
+
+Beta V.05
+
+     - Added sound When searching and canceling.
+     - Addon now continuously pings every 5 seconds while someone is actively trying to join your group.
+     - Options: Full Group Audio and Popup Alert do not work yet
+     - No longer connect to or broadcast to the old channel from the older version of the addon.
+     - Removed some settings im not going to use. Reorganized them.
+     - while browsing groups, you can now see how many the group is looking for when the person who created the group is using addon.
+     - Still need to add text entry for World PVP.
+
+
+Beta V.04
+
+     - OK, Major update. This may make or break the addon. I have tested and it seems ok. Please let me know different and ill fix asap!
+     - Changed Channels to something more readable so you know its from the app. you will still connect to the old channel for the few updates, just so older clients that do not use automatic install from Curse will/should get an outdated message.
+     - Groups can now be created with RAIDS and PVP groups. I created a generic World PVP for now (for raiding towns, areas etc that are not Instanced), but in the future I will put a text box where you can type in exactly WHAT you want to do and where.
+     - Whispers have been corrected, so when your Looking for a group you will not send anyone the automated message. (It should only ask for role and level if you created a group, not both)
+     - Groups no longer display all three roles for an individual when someone doesn't specify a role. Now, it will display nothing. in the future I hope to either instantiate roles based on class (IF all 3 roles are DPS only for that class like a mage, etc) or leave it as is.
+     - Important and why I Changed the ADDON channel: the format has changed on communication to now include multiple searches and instances when looking and the best way I could minimally impact system performance. This is the first step in allowing you to search for ANY available instance based on your level or ones you specifically choose. 
+
+
+Beta V.03
+
+     - Added versioning. you will be notified ONE time that there is an update to the addon during the entire game session.
+     - All Prints have been removed.
+     - You will be notified in one line once the addon has been loaded and that you can use it.
+     - The only notifications you should receive in chat are error messages when your trying to do something.
+
+
+Beta V.02
+
+     - Addon should automatically stop your search if you either: Join a group or your group is "full". Please let me know otherwise (what happened, how many in your group, Instance, etc)
+     - Then you are actively searching for a team and someone whispers you with the role they wish to join as but not their level or vice versa, they will get a default whisper back asking for both Role and level. When you receive proper information, it will add them to your Create a group window. (when Settings/Accept Whispers is enabled)
+     - Added default "Builds" for groups of 5, 20 and 40 when using auto accept.
+     - Added Settings and Global for future updates. (Taking suggestions)
+     - Fixed the Addon channel pushing other channels down. IF your channels are still pushed down, it because the channel already exists before the update, please just right click on your General Channel tab (Main tab), Select Settings. Click on Global Channels (On left) and drag the Addon channel to the bottom.
+     - Fixed an issue some had with their LFG/LFM creating the wrong broadcast (didn't effect game play, just added an extra broadcast to the addon channel
+
+
+Beta V.01
+     - Fixed the Guild bug. Guild feature did not work when you first start the game, but after a reload it worked.
+     - Added an option to do a more accurate system scan, but at a cost to a slow system. Option is in settings
+
+
+First Version. 
+     - LFG and LFM work, along with basic settings. Guild groups work also as well as filtering

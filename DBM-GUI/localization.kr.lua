@@ -18,7 +18,7 @@ L.TabCategory_MOP	 		= "판다리아의 안개"
 L.TabCategory_CATA	 		= "대격변"
 L.TabCategory_WOTLK 		= "리치 왕의 분노"
 L.TabCategory_BC 			= "불타는 성전"
-L.TabCategory_OTHER			= "기타 보스 모드"
+L.TabCategory_OTHER			= "기타 모드"
 
 L.BossModLoaded 			= "%s 통계"
 L.BossModLoad_now 			= [[보스 모드가 로딩되지 않았습니다.
@@ -71,9 +71,6 @@ L.Button_InfoFrame			= "정보 창 표시/숨기기"
 L.Button_TestBars			= "테스트 바 시작"
 L.Button_ResetInfoRange		= "정보/거리 창 위치 초기화"
 
-L.ClassicOptions			= "클래식 설정"
-L.UseRetailShamanColor		= "WoW 클래식 주술사 직업 색상을 최신 확장팩 색상으로 변경 (게임 전체에 적용)"
-
 -- Tab: Raidwarning
 L.Tab_RaidWarning 			= "공격대 경보"
 L.RaidWarning_Header		= "공격대 경보 설정"
@@ -112,12 +109,12 @@ L.CombatMessages			= "전투 메시지 설정"
 L.ShowEngageMessage 		= "대화창에 전투 시작 메시지 표시"
 L.ShowDefeatMessage 		= "대화창에 처치/전멸 메시지 표시"
 L.ShowGuildMessages 		= "대화창에 길드 레이드 전투 시작/보스 처치/전멸 메시지 표시"
-L.WhisperMessages			= "귓속말 메시지 설정"
+L.WhisperMessages			= "자동 응답/메시지 공유 설정"
 L.AutoRespond 				= "전투중 귓속말 자동 응답"
-L.EnableStatus 				= "'status' 라는 귓속말을 받으면 자동 응답"
 L.WhisperStats 				= "귓속말 응답에 처치/전멸 통계 포함"
 L.DisableStatusWhisper 		= "전체 파티/공격대의 귓속말 응답을 끕니다. (파티/공대장 권한 필요) 일반/영웅/신화 레이드 및 신화+ 던전에만 적용됩니다"
 L.DisableGuildStatus 		= "길드에 진행 상황 알림 메시지를 전송하지 않습니다. (파티/공대장 권한 필요)"
+L.EnableWBSharing 			= "필드 보스 풀링/처치시 같은 서버의 배틀넷 친구에게 정보를 공유합니다. (이 정보는 길드에도 항상 공유됩니다)"
 
 -- Tab: Barsetup
 L.BarSetup  				= "타이머 바 설정"
@@ -221,7 +218,7 @@ L.SpecialWarnSound5			= "메모에 이름이 있을때 특수 경고의 기본 �
 
 -- Tab: Spoken Alerts Frame
 L.Panel_SpokenAlerts		= "음성 경보"
-L.Area_VoiceSelection		= "음성 선택 (마우스 휠로 메뉴 스크롤)"
+L.Area_VoiceSelection		= "음성 선택"
 L.CountdownVoice			= "1순위 초읽기 음성 설정"
 L.CountdownVoice2			= "2순위 초읽기 음성 설정"
 L.CountdownVoice3			= "3순위 초읽기 음성 설정"
@@ -292,7 +289,6 @@ L.Area_PullTimer			= "풀링, 휴식, 전투, 사용자 지정 바 필터 설정
 L.DontShowPTNoID			= "같은 지역에 없는 사용자가 보낸 풀링 타이머 차단"
 L.DontShowPT				= "풀링/휴식 타이머 표시 안함"
 L.DontShowPTText			= "풀링/휴식 알림 텍스트 표시 안함"
-L.DontShowPTCountdownText	= "풀링 초읽기 숫자 표시 안함"
 L.DontPlayPTCountdown		= "풀링/휴식/전투/사용자 지정 초읽기 전구간 음성 재생 안함"
 L.PT_Threshold				= "휴식/전투/사용자 지정 타이머 초읽기 음성 재생 안함: %d초 까지"
 

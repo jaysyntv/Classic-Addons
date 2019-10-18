@@ -1,7 +1,7 @@
 --[[
 	Stubby AddOn for World of Watcraft (tm)
-	Version: 5.0.PRE.2995 (BillyGoat)
-	Revision: $Id: Stubby.lua 52 2007-12-14 01:32:36Z RockSlice $
+	Version: 8.2.6376 (SwimmingSeadragon)
+	Revision: $Id: Stubby.lua 6376 2019-09-22 00:20:05Z none $
 	URL: http://auctioneeraddon.com/dl/Stubby/
 
 	Stubby is an addon that allows you to register boot code for
@@ -163,7 +163,7 @@
 	This constant is Stubby's revision number, a simple positive
 	integer that will increase by an arbitrary amount with each
 	new version of Stubby.
-	Current $Revision: 52 $
+	Current $Rev: 6376 $
 
 	Example:
 	-------------------------------------------
@@ -192,10 +192,11 @@
 	Note:
 		This AddOn's source code is specifically designed to work with
 		World of Warcraft's interpreted AddOn system.
-		You have an implicit licence to use this AddOn with these facilities
+		You have an implicit license to use this AddOn with these facilities
 		since that is its designated purpose as per:
 		http://www.fsf.org/licensing/licenses/gpl-faq.html#InterpreterIncompat
 ]]
+LibStub("LibRevision"):Set("$URL: Stubby/Stubby.lua $","$Rev: 6376 $","5.1.DEV.", 'auctioneer', 'libs')
 
 -------------------------------------------------------------------------------
 -- Error codes
@@ -218,13 +219,14 @@ local config = {
 	events = {},
 }
 
-local DebugLib = LibStub("DebugLib")
-local debug, assert
+local DebugLib = LibStub("DebugLib", true)
+local debug
+local assert = assert -- fallback to standard lua assert function
 if DebugLib then
 	debug, assert = DebugLib("Stubby")
 else
 	function debug() end
-	assert = debug
+	-- leave assert as it is
 end
 
 StubbyConfig = {}
@@ -474,7 +476,7 @@ function unhookFrom(triggerFunction)
 	end
 
 	-- make sure, that no other addon hooked this function meanwhile
-	if getglobal(triggerFunction) == config.hooks.origFuncs[triggerFunction] then
+	if _G[triggerFunction] == config.hooks.origFuncs[triggerFunction] then
 		triggerFunction = config.hooks.origFuncs[triggerFunction]
 		config.hooks.origFuncs[triggerFunction] = nil
 		config.hooks.functions[triggerFunction] = nil
@@ -645,6 +647,9 @@ end
 --[[
 	This function registers a given function to be called when a given addon is loaded, or immediatly if it is already loaded (this can be
 	used to setup a hooking function to execute when an addon is loaded but not before)
+	In certain cenarios IsAddOnLoaded returns 1 even though addon is not fully loaded yet. See http://jira.norganna.org/browse/STUB-8
+	for details. In these cases the hook function will be called twice. It should check by querting a global variable form the addon
+	if the addon was actually loaded, before accessing its functionality
  ]]
 function registerAddOnHook(triggerAddOn, ownerAddOn, hookFunction, ...)
 	if (IsAddOnLoaded(triggerAddOn)) then
@@ -653,21 +658,20 @@ function registerAddOnHook(triggerAddOn, ownerAddOn, hookFunction, ...)
 		else
 			hookFunction({...})
 		end
-	else
-		local addon = triggerAddOn:lower()
-		if (not config.loads[addon]) then config.loads[addon] = {} end
-		config.loads[addon][ownerAddOn] = nil
-		if (hookFunction) then
-			if (select("#", ...) == 0) then
-				config.loads[addon][ownerAddOn] = {
-					f = hookFunction,
-				}
-			else
-				config.loads[addon][ownerAddOn] = {
-					f = hookFunction,
-					a = {...},
-				}
-			end
+	end
+	local addon = triggerAddOn:lower()
+	if (not config.loads[addon]) then config.loads[addon] = {} end
+	config.loads[addon][ownerAddOn] = nil
+	if (hookFunction) then
+		if (select("#", ...) == 0) then
+			config.loads[addon][ownerAddOn] = {
+				f = hookFunction,
+			}
+		else
+			config.loads[addon][ownerAddOn] = {
+				f = hookFunction,
+				a = {...},
+			}
 		end
 	end
 end
@@ -883,21 +887,18 @@ function inspectAddOn(addonName, title, info)
 end
 
 function searchForNewAddOns()
-	local addonCount = GetNumAddOns()
-	local name, title, notes, enabled, loadable, reason, security, requiresLoad
-	for i=1, addonCount do
-		requiresLoad = false
-		name, title, notes, enabled, loadable, reason, security = GetAddOnInfo(i)
-		if (IsAddOnLoadOnDemand(i) and shouldInspectAddOn(name) and loadable) then
-			local addonDeps = { GetAddOnDependencies(i) }
-			for _, dependancy in pairs(addonDeps) do
-				if (dependancy:lower() == "stubby") then
-					requiresLoad = true
+	for i=1, GetNumAddOns() do
+		if IsAddOnLoadOnDemand(i) then
+			local name, title, notes, _, reason = GetAddOnInfo(i)
+			if shouldInspectAddOn(name) and (reason == "DEMAND_LOADED" or reason == "DEP_DEMAND_LOADED") then
+				for _, dependancy in pairs({GetAddOnDependencies(i)}) do
+					if (dependancy:lower() == "stubby") then
+						inspectAddOn(name, title, notes)
+						break
+					end
 				end
 			end
 		end
-
-		if (requiresLoad) then inspectAddOn(name, title, notes) end
 	end
 end
 
@@ -907,8 +908,8 @@ function runBootCodes()
 	if (not StubbyConfig.boots) then return end
 	for addon, boots in pairs(StubbyConfig.boots) do
 		if (not IsAddOnLoaded(addon) and IsAddOnLoadOnDemand(addon)) then
-			local _, _, _, _, loadable = GetAddOnInfo(addon)
-			if (loadable) then
+			local _, _, _, _, reason = GetAddOnInfo(addon)
+			if reason == "DEMAND_LOADED" or reason == "DEP_DEMAND_LOADED" then
 				for bootname, boot in pairs(boots) do
 					RunScript(boot)
 				end
@@ -1021,7 +1022,7 @@ end
 
 -- Extract the revision number from SVN keyword string
 function getRevision()
-	return tonumber(("$Revision: 52 $"):match("(%d+)"))
+	return tonumber(("$Rev: 6376 $"):match("(%d+)"))
 end
 
 -------------------------------------------------------------------------------
